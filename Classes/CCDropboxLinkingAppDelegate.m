@@ -7,7 +7,7 @@
 //
 
 #import "CCDropboxLinkingAppDelegate.h"
-#import <Dropbox/Dropbox.h>
+#import "Dropbox.h"
 
 @interface CCDropboxLinkingAppDelegate ()
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Dropbox/Dropbox.h>
+#import "Dropbox.h"
 
 typedef void (^CCDropboxCallback)(DBFile *file);
 
