@@ -9,14 +9,22 @@
 #import <Foundation/Foundation.h>
 #import "Dropbox.h"
 
-typedef void (^CCDropboxCallback)(DBFile *file);
+typedef id (^CCDropboxCallbackDataResult)();
+typedef id (^CCDropboxFileCallbackDataResult)(DBFile *file);
+typedef void (^CCDropboxFileCallback)(DBFile *file);
 
 
 @interface CCDropboxSync : NSObject
 
 + (instancetype)sharedSync;
 
-- (void)path:(DBPath *)path addSetupListener:(CCDropboxCallback)setup updateListener:(CCDropboxCallback)update;
+- (BOOL)writeString:(NSString *)string toPath:(DBPath *)path;
+- (BOOL)writeData:(NSData *)data toPath:(DBPath *)path;
 
+
+- (void)path:(DBPath *)path addSetupListener:(CCDropboxFileCallback)setup updateListener:(CCDropboxFileCallback)update;
+- (id)initialReadFromPath:(DBPath *)path
+    readingFromPathCallback:(CCDropboxFileCallbackDataResult)callback
+          noFileYetCallback:(CCDropboxCallbackDataResult)callback;
 
 @end

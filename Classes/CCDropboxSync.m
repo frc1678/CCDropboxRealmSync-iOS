@@ -9,7 +9,6 @@
 #import "CCDropboxSync.h"
 @interface CCDropboxSync()
 @property (nonatomic, strong) NSMutableDictionary *pathsToDBFiles;
-@property (nonatomic, strong) NSMutableDictionary *pathsToArraysOfSetupListeners;
 @property (nonatomic, strong) NSMutableDictionary *pathsToArraysOfUpdateListeners;
 @end
 
@@ -21,14 +20,6 @@
         _pathsToDBFiles = [[NSMutableDictionary alloc] init];
     }
     return _pathsToDBFiles;
-}
-
-- (NSMutableDictionary *)pathsToArraysOfSetupListeners
-{
-    if (!_pathsToArraysOfSetupListeners) {
-        _pathsToArraysOfSetupListeners = [[NSMutableDictionary alloc] init];
-    }
-    return _pathsToArraysOfSetupListeners;
 }
 
 
@@ -49,17 +40,11 @@
     return sharedSync;
 }
 
-- (void)path:(DBPath *)path addSetupListener:(CCDropboxCallback)setup updateListener:(CCDropboxCallback)update {
-    if (!self.pathsToArraysOfSetupListeners[path.stringValue]) {
-        self.pathsToArraysOfSetupListeners[path.stringValue] = [[NSMutableArray alloc] init];
-    }
+- (void)path:(DBPath *)path addSetupListener:(CCDropboxFileCallback)setup updateListener:(CCDropboxFileCallback)update {
     if (!self.pathsToArraysOfUpdateListeners[path.stringValue]) {
         self.pathsToArraysOfUpdateListeners[path.stringValue] = [[NSMutableArray alloc] init];
     }
-    
-    if (![self.pathsToArraysOfSetupListeners[path.stringValue] containsObject:setup]) {
-        [self.pathsToArraysOfSetupListeners[path.stringValue] addObject:setup];
-    }
+
     
     if (![self.pathsToArraysOfUpdateListeners[path.stringValue] containsObject:update]) {
         [self.pathsToArraysOfUpdateListeners[path.stringValue] addObject:update];
@@ -92,7 +77,7 @@
 
 - (void)callUpdateMethods:(DBFile *)file {
     NSArray *updateArray = self.pathsToArraysOfUpdateListeners[file.info.path.stringValue];
-    for(CCDropboxCallback callback in updateArray) {
+    for(CCDropboxFileCallback callback in updateArray) {
         callback(file);
     }
 }
@@ -121,6 +106,67 @@
         }];
     }
     
+}
+
+
+
+
+- (id)initialReadFromPath:(DBPath *)path readingFromPathCallback:(CCDropboxFileCallbackDataResult)callback noFileYetCallback:(CCDropboxCallbackDataResult)noFileCallback
+{
+    if([DBFilesystem sharedFilesystem] == nil) {
+        return nil;
+    }
+    
+    DBFile *file = self.pathsToDBFiles[path.stringValue];
+    BOOL createdNewFile = NO;
+    if (!file) {
+        // From http://stackoverflow.com/questions/16663000/ios-check-if-file-exists-dropbox-sync-api-ios-sdk
+        DBFileInfo *info = [[DBFilesystem sharedFilesystem] fileInfoForPath:path error:nil];
+        if(info) {
+            file = [[DBFilesystem sharedFilesystem] openFile:path error:nil];
+        } else {
+            NSError *error;
+            file = [[DBFilesystem sharedFilesystem] createFile:path error:&error];
+            createdNewFile = YES;
+        }
+        self.pathsToDBFiles[path.stringValue] = file;
+    }
+    
+    if(createdNewFile) {
+        return noFileCallback();
+    } else {
+        return callback(file);
+    }
+}
+
+
+- (BOOL)writeString:(NSString *)string toPath:(DBPath *)path {
+    return [self writeData:[string dataUsingEncoding:NSUTF8StringEncoding] toPath:path];
+}
+
+- (BOOL)writeData:(NSData *)data toPath:(DBPath *)path {
+    DBFile *file = self.pathsToDBFiles[path.stringValue];
+    if(!file) {
+        file = [CCDropboxSync createFileFromPath:path];
+    }
+    
+    return [file writeData:data error:nil];
+}
+
+
+
++ (DBFile *)createFileFromPath:(DBPath *)path {
+    DBFile *file;
+    
+    // From http://stackoverflow.com/questions/16663000/ios-check-if-file-exists-dropbox-sync-api-ios-sdk
+    DBFileInfo *info = [[DBFilesystem sharedFilesystem] fileInfoForPath:path error:nil];
+    if(info) {
+        file = [[DBFilesystem sharedFilesystem] openFile:path error:nil];
+    } else {
+        file = [[DBFilesystem sharedFilesystem] createFile:path error:nil];
+    }
+
+    return file;
 }
 
 @end
