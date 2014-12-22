@@ -7,20 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-//#import "Realm.h"
+#import "Realm.h"
+#import "Dropbox.h"
 
-//#import <Realm/RLMArray.h>
-//#import <Realm/RLMMigration.h>
-//#import <Realm/RLMObject.h>
-//#import <Realm/RLMPlatform.h>
-//#import <Realm/RLMRealm.h>
-//#import <Realm/RLMResults.h>
-//#import <Realm/RLMSchema.h>
-//#import <Realm/RLMSwiftHelpers.h>
+#warning THIS IS BLACK MAJJJJJJJJJIKKKKKKK
 
+typedef void (^CCRealmCallback)(RLMRealm *realm);
+
+// Subscribe to notificaitons from this constant to get database refreshes
+#define CC_NEW_REALM_NOTIFICATION @"CC_NEW_REALM_NOTIFICATION"
 
 @interface CCRealmSync : NSObject
 
-+ (RLMRealm *)defaultDBRealm;
++ (void)setRealmDropboxPath:(DBPath *)path;
++ (void)defaultReadonlyDropboxRealm:(CCRealmCallback) callback;
+
 
 @end
