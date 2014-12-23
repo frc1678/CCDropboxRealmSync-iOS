@@ -17,8 +17,8 @@ DBPath *realmDropboxPath = nil;
     realmDropboxPath = path;
 }
 
-#define REALM_PATH_A [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"a.realm"]
-#define REALM_PATH_B [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"b.realm"]
+#define REALM_PATH_A [[[RLMRealm defaultRealmPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"a.realm"]
+#define REALM_PATH_B [[[RLMRealm defaultRealmPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"b.realm"]
 
 NSString *currentReadonlyRealmPath = nil;
 
@@ -26,6 +26,8 @@ NSString *currentReadonlyRealmPath = nil;
     if(currentReadonlyRealmPath == nil) {
         currentReadonlyRealmPath = REALM_PATH_A;
         
+        
+    
         // Setup dropbox stuff
         // Once done syncing, callback()
         [[CCDropboxSync sharedSync] path:realmDropboxPath addSetupListener:^(DBFile *file) {
@@ -45,6 +47,7 @@ NSString *currentReadonlyRealmPath = nil;
 }
 
 + (void)downloadFromDropboxFileToNonActiveRealmPath:(DBFile *)file {
+    [file update:nil];
     NSData *realmData = [file readData:nil];
     NSString *newPath = [currentReadonlyRealmPath isEqualToString:REALM_PATH_A] ? REALM_PATH_B : REALM_PATH_A;
     currentReadonlyRealmPath = newPath;

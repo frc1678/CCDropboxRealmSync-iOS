@@ -59,9 +59,30 @@
             file = [[DBFilesystem sharedFilesystem] createFile:path error:nil];
         }
         
-        setup(file);
+        if(file == nil) {
+            NSLog(@"Dropbox probably not linked yet... :(");
+            return;
+        }
         
-//        self.pathsToDBFiles[path.stringValue] = file;
+        if(file.status.state == DBFileStateIdle) {
+            setup(file);
+        } else {
+            __weak DBFile *weakFile = file;
+            __weak CCDropboxSync *weakSelf = self;
+            [file addObserver:self block:^{
+                if(weakFile.status.state == DBFileStateIdle && weakFile.newerStatus == nil) {
+                    NSLog(@"New data loaded for first time setup");
+                    [weakFile update:nil];
+                    
+                    setup(weakFile);
+                    
+                    [weakFile removeObserver:weakSelf];
+                    
+                }
+            }];
+        }
+        
+        self.pathsToDBFiles[path.stringValue] = file;
         
         [[DBFilesystem sharedFilesystem] addObserver:self forPath:path block:^{
             NSLog(@"Path: %@ has been updated", path);
