@@ -15,7 +15,12 @@
 typedef void (^CCRealmCallback)(RLMRealm *realm);
 
 // Subscribe to notificaitons from this constant to get database refreshes
+// For CLIENT apps:
 #define CC_NEW_REALM_NOTIFICATION @"CC_NEW_REALM_NOTIFICATION"
+
+// For SERVER apps:
+#define CC_REALM_SETUP_NOTIFICATION @"CC_REALM_SETUP_NOTIFICATION"
+
 
 @interface CCRealmSync : NSObject
 

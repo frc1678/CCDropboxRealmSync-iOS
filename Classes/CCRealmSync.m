@@ -70,6 +70,7 @@ RLMNotificationToken *token;
             token = [[RLMRealm defaultRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
                 [self copyRealmToDropbox:dbPath];
             }];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CC_REALM_SETUP_NOTIFICATION object:[RLMRealm defaultRealm]];
         }
         NSLog(@"Downloaded realm data from dropbox");
         return nil;
@@ -78,6 +79,7 @@ RLMNotificationToken *token;
         token = [[RLMRealm defaultRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
             [self copyRealmToDropbox:dbPath];
         }];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CC_REALM_SETUP_NOTIFICATION object:[RLMRealm defaultRealm]];
         return nil;
     }];
 
