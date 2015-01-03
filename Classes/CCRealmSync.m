@@ -24,13 +24,14 @@ NSString *currentReadonlyRealmPath = nil;
 
 + (void)defaultReadonlyDropboxRealm:(CCRealmCallback) callback {
     if(currentReadonlyRealmPath == nil) {
-        currentReadonlyRealmPath = REALM_PATH_A;
         
         
     
         // Setup dropbox stuff
         // Once done syncing, callback()
+        //Add listeners to Dropbox
         [[CCDropboxSync sharedSync] path:realmDropboxPath addSetupListener:^(DBFile *file) {
+            currentReadonlyRealmPath = REALM_PATH_A;
             [self downloadFromDropboxFileToNonActiveRealmPath:file];
             callback([RLMRealm realmWithPath:currentReadonlyRealmPath readOnly:YES error:nil]);
         } updateListener:^(DBFile *file) {

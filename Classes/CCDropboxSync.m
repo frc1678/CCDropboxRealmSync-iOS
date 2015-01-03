@@ -51,7 +51,13 @@
     }
     
     if (!self.pathsToDBFiles[path.stringValue]) {
-        DBFileInfo *info = [[DBFilesystem sharedFilesystem] fileInfoForPath:path error:nil];
+        NSError *error = nil;
+        DBFileInfo *info = [[DBFilesystem sharedFilesystem] fileInfoForPath:path error:&error];
+        if(error) {
+            NSLog(@"Error getting file info: %@", error);
+            return;
+        }
+        
         DBFile *file;
         if(info) {
             file = [[DBFilesystem sharedFilesystem] openFile:path error:nil];
