@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #define CC_DROPBOX_APP_DELEGATE ((CCDropboxLinkingAppDelegate *)[[UIApplication sharedApplication] delegate])
+#define CC_DROPBOX_LINK_NOTIFICATION @"CC_DROPBOX_LINK_NOTIFICATION"
 
 @interface CCDropboxLinkingAppDelegate : UIResponder <UIApplicationDelegate>
 

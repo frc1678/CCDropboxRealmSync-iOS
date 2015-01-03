@@ -59,9 +59,7 @@
         
         // Update Realm database a few seconds after it is done linking, to give Dropbox time to finish syncing.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [CCRealmSync defaultReadonlyDropboxRealm:^(RLMRealm *realm) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:CC_NEW_REALM_NOTIFICATION object:realm];
-            }];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CC_DROPBOX_LINK_NOTIFICATION object:[DBFilesystem sharedFilesystem]];
         });
         
         

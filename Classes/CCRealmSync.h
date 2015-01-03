@@ -19,8 +19,12 @@ typedef void (^CCRealmCallback)(RLMRealm *realm);
 
 @interface CCRealmSync : NSObject
 
+
+// Methods for CLIENT apps to use:
 + (void)setRealmDropboxPath:(DBPath *)path;
 + (void)defaultReadonlyDropboxRealm:(CCRealmCallback) callback;
 
+// Methods for SERVER apps to use:
++ (void)setupDefaultRealmForDropboxPath:(DBPath *)path;
 
 @end

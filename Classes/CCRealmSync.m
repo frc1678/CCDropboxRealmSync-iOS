@@ -57,9 +57,47 @@ NSString *currentReadonlyRealmPath = nil;
 
 
 
+RLMNotificationToken *token;
++ (void)setupDefaultRealmForDropboxPath:(DBPath *)dbPath {
+    // Note to self: abstract this
+    [[CCDropboxSync sharedSync] initialReadFromPath:dbPath readingFromPathCallback:^id(DBFile *file) {
+        NSData *data = [file readData:nil];
+        if([data length] > 0) {
+            NSString *path = [RLMRealm defaultRealmPath];
+            [data writeToFile:path atomically:YES];
+            [[RLMRealm defaultRealm] refresh];
+            
+            token = [[RLMRealm defaultRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+                [self copyRealmToDropbox:dbPath];
+            }];
+        }
+        NSLog(@"Downloaded realm data from dropbox");
+        return nil;
+    } noFileYetCallback:^id{
+        NSLog(@"No data Yet");
+        token = [[RLMRealm defaultRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+            [self copyRealmToDropbox:dbPath];
+        }];
+        return nil;
+    }];
+
+}
 
 
+// Note to self: abstract this
+// The path of the file to write the default realm to before uploading to Dropbox
+#define REALM_LOCAL_PATH [[[RLMRealm defaultRealmPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"1678_LOCAL.realm"]
++ (void)copyRealmToDropbox:(DBPath *)path {
+    [[NSFileManager defaultManager] removeItemAtPath:REALM_LOCAL_PATH error:nil];
+    [[RLMRealm defaultRealm] writeCopyToPath:REALM_LOCAL_PATH error:nil];
+    [self writeLocalFileToDropbox:path];
+}
 
+
++ (void)writeLocalFileToDropbox:(DBPath *)path {
+    NSData *realmData = [NSData dataWithContentsOfFile:REALM_LOCAL_PATH];
+    [[CCDropboxSync sharedSync] writeData:realmData toPath:path];
+}
 
 
 @end
