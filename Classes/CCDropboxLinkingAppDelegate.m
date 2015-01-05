@@ -16,13 +16,13 @@
 
 @implementation CCDropboxLinkingAppDelegate
 
-
 - (void)setupDBFilesystemForAccount:(DBAccount *)account {
     DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
     [DBFilesystem setSharedFilesystem:filesystem];
     NSLog(@"Shared filesystem object created");
 }
 
+//Link app to dropbox if it's not already linked.
 - (void) possiblyLinkFromController:(UIViewController *)controller {
     if ([DBAccountManager sharedManager].linkedAccount == nil) {
         [[DBAccountManager sharedManager] linkFromController:controller];
@@ -33,11 +33,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Dropbox initialization: See https://www.dropbox.com/developers/sync/start/ios
+    //Its probably not great code to have the app key and the secret hardcoded here. Maybe use #define?
     DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"fu1drprr1bha4zl"
-                                                                         secret:@"x8f4ehb2qyk30r4"];
+                                                                         secret:@"x8f4ehb2qyk30r4"]; 
     [DBAccountManager setSharedManager:accountManager];
-    
-    
     DBAccount *account = [[DBAccountManager sharedManager] linkedAccount];
     if (account) {
         [self setupDBFilesystemForAccount:account];
