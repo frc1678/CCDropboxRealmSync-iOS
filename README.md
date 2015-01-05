@@ -16,12 +16,27 @@ Framework to handle lightweight syncing of Realm databases via Dropbox
 3 In `viewDidLoad` make sure to include:
 ```objectivec
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseUpdated:) name:CC_NEW_REALM_NOTIFICATION object:nil]; // Sign up for notifications for the Realm Database
-[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(putDataInTableViewFromRealm) name:CC_DROPBOX_LINK_NOTIFICATION object:nil];
-[CCRealmSync setRealmDropboxPath:[self dropboxFilePath]];
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadUIBecauseDropboxIsLinkedNow) name:CC_DROPBOX_LINK_NOTIFICATION object:nil];
+[CCRealmSync setRealmDropboxPath:MY_DBX_PATH];
 ```
+where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
 
 4 In `viewDidAppear` include `[CC_DROPBOX_APP_DELEGATE possiblyLinkFromController:self];`.
 
+5 When implementing `databaseUpdated:`, the object attached to the `NSNotification` is the `RLMRealm` object that you should use for all reading operations. Example:
+```objectivec
+- (void)databaseUpdated:(NSNotification *)note {
+  RLMRealm *realm = note.object; 
+  // Do stuff with realm object
+}
+```
+
+6 Any other time you want to read from the Realm database, the only way you should access it is via: `CCRealmSync +defaultReadonlyDropboxRealm:` Example:
+```objectivec
+[CCRealmSync defaultReadonlyDropboxRealm:^(RLMRealm *realm) {
+  // Do stuff with realm object
+}];
+```
 ## Using Server API:
 
 1 In your `AppDelegate.h` make sure to have `#import "CCDropboxLinkingAppDelegate.h"` as well as `@interface AppDelegate : CCDropboxLinkingAppDelegate`.
