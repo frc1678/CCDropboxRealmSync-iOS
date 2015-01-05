@@ -40,20 +40,18 @@ where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
 
 1 In your `AppDelegate.h` make sure to have `#import "CCDropboxLinkingAppDelegate.h"` as well as `@interface AppDelegate : CCDropboxLinkingAppDelegate`.
 
-2 In `AppDelegate.h` make sure to import `<Dropbox/Dropbox.h>`.
-
-3 In your view controller .m file you must include the following:
+2 In your view controller .m file you must include the following:
 ```objectivec
 #import "CCDropboxLinkingAppDelegate.h"
 #import "CCRealmSync.h"
 ```
 
-4 In `viewDidLoad` make sure to include:
+3 In `viewDidLoad` make sure to include:
 ```objectivec
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dropboxLinked:) name:CC_DROPBOX_LINK_NOTIFICATION object:nil];
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startDatabaseOperations) name:CC_REALM_SETUP_NOTIFICATION object:nil];
 [CCRealmSync setupDefaultRealmForDropboxPath:[self databaseDBPath]];
 ```
 
-5 In `viewDidAppear` include `[CC_DROPBOX_APP_DELEGATE possiblyLinkFromController:self];`.
+4 In `viewDidAppear` include `[CC_DROPBOX_APP_DELEGATE possiblyLinkFromController:self];`.
 
