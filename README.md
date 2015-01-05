@@ -3,8 +3,7 @@ CCDropboxRealmSync-iOS
 
 Framework to handle lightweight syncing of Realm databases via Dropbox
 
-
-Using Client API:
+## Using Client API:
 
 1 In your `AppDelegate.h` make sure to have `#import "CCDropboxLinkingAppDelegate.h"` as well as `@interface AppDelegate : CCDropboxLinkingAppDelegate`
 
@@ -25,7 +24,7 @@ Using Client API:
 
 4 In `viewDidAppear` include `[CC_DROPBOX_APP_DELEGATE possiblyLinkFromController:self];`.
 
-Using Server API:
+## Using Server API:
 
 1 In your `AppDelegate.h` make sure to have `#import "CCDropboxLinkingAppDelegate.h"` as well as `@interface AppDelegate : CCDropboxLinkingAppDelegate`.
 
