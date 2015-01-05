@@ -30,7 +30,7 @@ where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
 }
 ```
 
-6 Any other time you want to read from the Realm database, the only way you should access it is via: `CCRealmSync +defaultReadonlyDropboxRealm:` Example:
+6 Any other time you want to read from the Realm database, the **_only_** way you should access it is via: `CCRealmSync +defaultReadonlyDropboxRealm:` Example:
 ```objectivec
 [CCRealmSync defaultReadonlyDropboxRealm:^(RLMRealm *realm) {
   // Do stuff with realm object
@@ -50,8 +50,20 @@ where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
 ```objectivec
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dropboxLinked:) name:CC_DROPBOX_LINK_NOTIFICATION object:nil];
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startDatabaseOperations) name:CC_REALM_SETUP_NOTIFICATION object:nil];
-[CCRealmSync setupDefaultRealmForDropboxPath:[self databaseDBPath]];
+[CCRealmSync setupDefaultRealmForDropboxPath:MY_DBX_PATH];
 ```
+where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
 
 4 In `viewDidAppear` include `[CC_DROPBOX_APP_DELEGATE possiblyLinkFromController:self];`.
 
+5 Implement `dropboxLinked:` (for the above `NSNotification`) exactly like this:
+```objectivec
+- (void)dropboxLinked:(NSNotification *)note {
+  [CCRealmSync setupDefaultRealmForDropboxPath:MY_DBX_PATH];
+}
+```
+where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
+
+6 **_ONLY_** start database operations once the `CC_REALM_SETUP_NOTIFICATION` has been triggered.
+
+7 **_Always_** use the default Realm for all database operations: `[RLMRealm defaultRealm]`
