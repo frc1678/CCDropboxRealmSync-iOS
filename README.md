@@ -9,7 +9,6 @@ Framework to handle lightweight syncing of Realm databases via Dropbox
 
 2 In your view controller .m file you must include the folowing:
 ```objectivec
-#import "ViewController.h"
 #import <CCDropboxRealmSync-iOS/CCDropboxLinkingAppDelegate.h>
 #import "CCRealmSync.h"
 ```
@@ -46,9 +45,6 @@ where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
 3 In your view controller .m file you must include the following:
 ```objectivec
 #import "CCDropboxLinkingAppDelegate.h"
-#import "CCDropboxSync.h"
-#import <Realm/Realm.h>
-#import <RealmModels.h>
 #import "CCRealmSync.h"
 ```
 
