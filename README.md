@@ -30,7 +30,7 @@ where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
 }
 ```
 
-6 Any other time you want to read from the Realm database, the **_only_** way you should access it is via: `CCRealmSync +defaultReadonlyDropboxRealm:` Example:
+6 Any other time you want to read from the Realm database _AS THE CLIENT_, the **_only_** way you should access it is via: `CCRealmSync +defaultReadonlyDropboxRealm:` Example:
 ```objectivec
 [CCRealmSync defaultReadonlyDropboxRealm:^(RLMRealm *realm) {
   // Do stuff with realm object
@@ -66,4 +66,4 @@ where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
 
 6 **_ONLY_** start database operations once the `CC_REALM_SETUP_NOTIFICATION` has been triggered.
 
-7 **_Always_** use the default Realm for all database operations: `[RLMRealm defaultRealm]`
+7 **_Always_** use the default Realm for all database operations _AS THE SERVER_: `[RLMRealm defaultRealm]`
