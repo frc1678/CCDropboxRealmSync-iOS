@@ -39,7 +39,7 @@
     [DBAccountManager setSharedManager:accountManager];
     DBAccount *account = [[DBAccountManager sharedManager] linkedAccount];
     if (account) {
-        [self setupDBFilesystemForAccount:account];
+        [CCDropboxLinkingAppDelegate setupDBFilesystemForAccount:account];
     }
     
     return YES;
@@ -54,7 +54,7 @@
     if (account) {
         NSLog(@"App linked successfully!");
         
-        [self setupDBFilesystemForAccount:account];
+        [CCDropboxLinkingAppDelegate setupDBFilesystemForAccount:account];
         
         // Update Realm database a few seconds after it is done linking, to give Dropbox time to finish syncing.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
