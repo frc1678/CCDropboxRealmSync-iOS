@@ -5,6 +5,8 @@ Framework to handle lightweight syncing of Realm databases via Dropbox
 
 ## Using Client API:
 
+0 Go to Project Settings, then the Info tab, and expand the URL Types section. Add a new URL Type with the scheme db-fu1drprr1bha4zl.
+
 1 In your `AppDelegate.h` make sure to have `#import "CCDropboxLinkingAppDelegate.h"` as well as `@interface AppDelegate : CCDropboxLinkingAppDelegate`
 
 2 In your view controller .m file you must include the folowing:
@@ -37,6 +39,8 @@ where `MY_DBX_PATH` is the `DBPath` to the Realm database on Dropbox
 }];
 ```
 ## Using Server API:
+
+0 Go to Project Settings, then the Info tab, and expand the URL Types section. Add a new URL Type with the scheme db-fu1drprr1bha4zl.
 
 1 In your `AppDelegate.h` make sure to have `#import "CCDropboxLinkingAppDelegate.h"` as well as `@interface AppDelegate : CCDropboxLinkingAppDelegate`.
 
