@@ -16,6 +16,10 @@
 
 @implementation CCDropboxLinkingAppDelegate
 
++ (CCDropboxLinkingAppDelegate *) getCCDropboxAppDelegate {
+    return ((CCDropboxLinkingAppDelegate *)[[UIApplication sharedApplication] delegate]);
+}
+
 - (void)setupDBFilesystemForAccount:(DBAccount *)account {
     DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
     [DBFilesystem setSharedFilesystem:filesystem];
