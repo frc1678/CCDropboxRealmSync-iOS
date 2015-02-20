@@ -13,6 +13,8 @@
 
 @interface CCDropboxLinkingAppDelegate : UIResponder <UIApplicationDelegate>
 
++ (CCDropboxLinkingAppDelegate *) getCCDropboxAppDelegate;
+
 @property (strong, nonatomic) UIWindow *window;
 
 - (void)possiblyLinkFromController:(UIViewController *)controller;
