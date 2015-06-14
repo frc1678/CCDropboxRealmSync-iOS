@@ -38,8 +38,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Dropbox initialization: See https://www.dropbox.com/developers/sync/start/ios
     //Its probably not great code to have the app key and the secret hardcoded here. Maybe use #define?
-    DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"fu1drprr1bha4zl"
-                                                                         secret:@"x8f4ehb2qyk30r4"]; 
+    DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"YOUR_KEY"
+                                                                         secret:@"YOUR_SECRET"];
     [DBAccountManager setSharedManager:accountManager];
     DBAccount *account = [[DBAccountManager sharedManager] linkedAccount];
     if (account) {
